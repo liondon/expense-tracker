@@ -8,7 +8,7 @@ const categorySchema = new Schema({
   icon: {
     type: String,
     required: true,
-    default: 'pen?style=solid'
+    // default: 'pen?style=solid'
   }
 })
 

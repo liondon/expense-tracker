@@ -1,4 +1,6 @@
 const mongoose = require('mongoose')
+// const timeZone = require('mongoose-timezone')
+
 const Schema = mongoose.Schema
 const recordSchema = new Schema({
   name: {
@@ -21,5 +23,5 @@ const recordSchema = new Schema({
     required: true
   }
 })
-
+// recordSchema.plugin(timeZone, { paths: ['date'] });
 module.exports = mongoose.model('Record', recordSchema)

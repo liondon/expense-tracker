@@ -1,3 +1,4 @@
+// 時間一律使用UTC時間，不分各地時區
 const express = require('express')
 const exphbs = require('express-handlebars')
 const mongoose = require('mongoose')
@@ -35,7 +36,7 @@ app.get('/', async (req, res) => {
     records.forEach(record => {
       record.icon = categoryTable[record.categoryId]
       const date = record.date
-      record.date = `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`
+      record.date = `${date.getUTCFullYear()}/${date.getUTCMonth() + 1}/${date.getUTCDate()}`
       totalAmount += record.amount
     })
     return res.render('index', { records, totalAmount, categories })
@@ -72,6 +73,17 @@ app.post('/records', async (req, res) => {
 app.get('/records/:id/edit', async (req, res) => {
   try {
     const record = await Record.findOne({ _id: req.params.id }).lean()
+    console.log(record.date)
+    const YYYY = `${record.date.getUTCFullYear()}`
+    const MM = (record.date.getUTCMonth() + 1) > 9
+      ? `${record.date.getUTCMonth() + 1}`
+      : `0${record.date.getUTCMonth() + 1}`
+    const DD = record.date.getUTCDate() > 9
+      ? `${record.date.getUTCDate()}`
+      : `0${record.date.getUTCDate()}`
+    record.date = `${YYYY}-${MM}-${DD}`
+    console.log(record)
+
     const recordCategory = await Category.findOne({ _id: record.categoryId }).lean()
     const recordCategoryName = recordCategory.name
     const categories = await Category.find().lean().sort({ _id: 'asc' })
