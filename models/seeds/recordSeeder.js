@@ -6,7 +6,7 @@ const db = require('../../config/mongoose')
 db.once('open', async () => {
   try {
     let SEED_CATEGORY = await Category.find().lean().sort({ _id: 'asc' })
-    let createRecords = await Promise.all(Array.from(
+    await Promise.all(Array.from(
       { length: SEED_CATEGORY.length },
       (_, i) => Record.create({
         name: `record-${i + 1}`,
