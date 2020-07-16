@@ -13,7 +13,7 @@ db.once('open', async () => {
         categoryId: SEED_CATEGORY[i]._id,
         amount: (i + 1) * 10,
         merchant: `shop-${i}`,
-        date: `2020-0${i}`
+        date: `2020-0${i + 1}`
       })))
     console.log('record seeds added.')
     process.exit()
