@@ -1,0 +1,41 @@
+<div class="row justify-content-around align-items-center mt-5">
+  <div class="col">
+    <h3>Total Amount: {{totalAmount}}</h3>
+  </div>
+  <div class="col">
+    <div class="form-group">
+      {{!-- 如何顯示預設值待研究 --}}
+      <label for="category">Category</label>
+      <select class="form-control" id="category" name="category" value="{{ categoryName }}" required>
+        {{#each categories}}
+        <option>{{this.name}}</option>
+        {{/each}}
+      </select>
+    </div>
+  </div>
+</div>
+
+<ul class="list-group mt-5">
+  {{#each records}}
+  <li class="list-group-item">
+    <div class="row">
+      <div class="col-1 text-center align-self-center">
+        <span>{{{this.icon}}}</span>
+      </div>
+      <div class="col-4 align-self-center">
+        <h4>{{this.name}}</h4>
+        <span>{{this.date}}</span>
+      </div>
+      <div class="col-3 text-right align-self-center">
+        <h4>${{this.amount}}</h4>
+      </div>
+      <div class="col-4 text-center align-self-center">
+        <a href="./records/{{this._id}}/edit" class="btn btn-primary">Edit</a>
+        <form action="./records/{{this._id}}?_method=DELETE" method="POST" style="display: inline;">
+          <button class="btn btn-danger" type="submit" style="display: inline; ">Delete</button>
+        </form>
+      </div>
+    </div>
+  </li>
+  {{/each}}
+</ul>
