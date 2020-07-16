@@ -2,28 +2,22 @@
   <div class="col-6 text-center align-self-center">
     <h3>Total Amount: {{totalAmount}}</h3>
   </div>
-  <div class="col-3">
-    <form method="GET" action="/">
-      <div class="form-group">
-        <label for="category">Category</label>
-        <select class="form-control" id="categoryId" name="categoryId" onchange="submit();">
-          <option value="" {{#if (eq categories.compareWith undefined)}}SELECTED{{/if}}>All</option>
-          {{#each categories}}
-          <option value="{{this._id}}" {{#if (eq this._id this.compareWith)}}SELECTED{{/if}}>{{this.name}}</option>
-          {{/each}}
-        </select>
-      </div>
-    </form>
-  </div>
-  <div class="col-3">
-    <form method="GET" action="/">
-      <div class="form-group">
-        <label for="category">Month</label>
-        </br>
-        <input type="month" id="month" name="month" value="{{#if monthFilter}}{{monthFilter}}{{else}}2020-08{{/if}}">
-      </div>
-    </form>
-  </div>
+  <form method="GET" action="/">
+    <div class="form-group">
+      <label for="category">Category</label>
+      <select class="form-control" id="categoryId" name="categoryId" onchange="submit();">
+        <option value="" {{#if (eq categories.compareWith undefined)}}SELECTED{{/if}}>All</option>
+        {{#each categories}}
+        <option value="{{this._id}}" {{#if (eq this._id this.compareWith)}}SELECTED{{/if}}>{{this.name}}</option>
+        {{/each}}
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="category">Month</label>
+      </br>
+      <input type="month" id="month" name="month" value="{{#if monthFilter}}{{monthFilter}}{{else}}{{/if}}">
+    </div>
+  </form>
 </div>
 
 <ul class="list-group mt-5">
