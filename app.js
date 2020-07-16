@@ -12,6 +12,8 @@ const Record = require('./models/record')
 require('./config/mongoose')
 
 const app = express()
+const ip = process.env.IP
+const port = process.env.PORT
 
 var hbs = exphbs.create({
   // Specify helpers which are only registered on this instance.
@@ -153,6 +155,6 @@ app.delete('/records/:id', async (req, res) => {
   }
 })
 
-app.listen(3000, () => {
-  console.log(`Express server is running on http://localhost:3000`)
+app.listen(port, () => {
+  console.log(`Express server is running on http://${ip}:${port}`)
 })
