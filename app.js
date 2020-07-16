@@ -1,4 +1,5 @@
 // 時間一律使用UTC時間，不分各地時區
+
 const express = require('express')
 const exphbs = require('express-handlebars')
 const mongoose = require('mongoose')
@@ -28,10 +29,17 @@ app.use(methodOverride('_method'))
 
 app.get('/', async (req, res) => {
   try {
+    const categoryIdFilter = req.query.categoryId
     const categories = await Category.find().lean().sort({ _id: 'asc' })
     const categoryTable = {}
-    categories.forEach(category => categoryTable[category._id] = category.icon)
-    const records = await Record.find().lean().sort({ _id: 'asc' })
+    categories.forEach(category => {
+      categoryTable[category._id] = category.icon
+      category._id = category._id.toString()
+      category.compareWith = categoryIdFilter
+    })
+    const records = categoryIdFilter
+      ? await Record.find({ categoryId: categoryIdFilter }).lean().sort({ _id: 'asc' })
+      : await Record.find().lean().sort({ _id: 'asc' })
     let totalAmount = 0
     records.forEach(record => {
       record.icon = categoryTable[record.categoryId]
