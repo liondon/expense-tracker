@@ -49,8 +49,7 @@ app.get('/', async (req, res) => {
     if (categoryIdFilter && monthFilter) {
       records = await Record.find({
         categoryId: categoryIdFilter,
-        $and: [{ date: { $gte: `${yearMonth[0]}-${yearMonth[1]}` } },
-        { date: { $lt: `${yearMonth[0]}-${nextMonth}` } }]
+        date: { $eq: `${yearMonth[0]}-${yearMonth[1]}` }
       }).lean().sort({ _id: 'asc' })
     } else if (categoryIdFilter) {
       records = await Record.find({ categoryId: categoryIdFilter }).lean().sort({ _id: 'asc' })
