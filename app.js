@@ -45,18 +45,18 @@ app.get('/', async (req, res) => {
       category.compareWith = categoryIdFilter
     })
 
+    // 可改用 filterCondition 簡化程式碼
     let records = ''
     if (categoryIdFilter && monthFilter) {
       records = await Record.find({
         categoryId: categoryIdFilter,
-        date: { $eq: `${yearMonth[0]}-${yearMonth[1]}` }
+        date: { $gte: `${yearMonth[0]}-${yearMonth[1]}-01`, $lt: `${yearMonth[0]}-${nextMonth}-01` }
       }).lean().sort({ _id: 'asc' })
     } else if (categoryIdFilter) {
       records = await Record.find({ categoryId: categoryIdFilter }).lean().sort({ _id: 'asc' })
     } else if (monthFilter) {
       records = await Record.find({
-        $and: [{ date: { $gte: `${yearMonth[0]}-${yearMonth[1]}` } },
-        { date: { $lte: `${yearMonth[0]}-${nextMonth}` } }]
+        date: { $gte: `${yearMonth[0]}-${yearMonth[1]}-01`, $lt: `${yearMonth[0]}-${nextMonth}-01` }
       }).lean().sort({ _id: 'asc' })
     } else {
       records = await Record.find().lean().sort({ _id: 'asc' })
