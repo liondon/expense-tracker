@@ -20,7 +20,7 @@
       <div class="form-group">
         <label for="category">Month</label>
         </br>
-        <input type="month" id="month" name="month" value="{{monthFilter}}">
+        <input type="month" id="month" name="month" value="{{#if monthFilter}}{{monthFilter}}{{else}}2020-08{{/if}}">
       </div>
     </form>
   </div>

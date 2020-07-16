@@ -12,8 +12,8 @@ const Record = require('./models/record')
 require('./config/mongoose')
 
 const app = express()
-const ip = process.env.IP
-const port = process.env.PORT
+const ip = process.env.IP || 'localhost'
+const port = process.env.PORT || 3000
 
 var hbs = exphbs.create({
   // Specify helpers which are only registered on this instance.
@@ -33,7 +33,7 @@ app.get('/', async (req, res) => {
   try {
     const categoryIdFilter = req.query.categoryId || ''
     const monthFilter = req.query.month || ''
-    const yearMonth = req.query.month.split('-')
+    const yearMonth = monthFilter.split('-')
     let nextMonth = parseInt(yearMonth[1]) + 1
     nextMonth = (nextMonth > 9) ? `${nextMonth}` : `0${nextMonth}`
 
