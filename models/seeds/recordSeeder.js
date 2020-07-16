@@ -12,7 +12,8 @@ db.once('open', () => {
         (_, i) => Record.create({
           name: `record-${i + 1}`,
           categoryId: SEED_CATEGORY[i]._id,
-          amount: (i + 1) * 10
+          amount: (i + 1) * 10,
+          merchant: `shop-${i}`
         })))
     })
     .then(() => {

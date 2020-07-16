@@ -36,6 +36,13 @@
             <input class="form-control" type="number" name="amount" id="amount" placeholder="Enter Amount"
               value="{{ record.amount }}" required>
           </div>
+
+          <div class="form-group">
+            <label for="name">Merchant</label>
+            <input class="form-control" type="text" id="merchant" name="merchant" placeholder="Enter Merchant"
+              value="{{ record.merchant }}">
+          </div>
+
           <button type="submit" class="btn btn-primary btn-block mt-4">Submit</button>
         </form>
     </div>

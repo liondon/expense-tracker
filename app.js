@@ -64,13 +64,14 @@ app.get('/records/new', async (req, res) => {
 
 app.post('/records', async (req, res) => {
   try {
-    const { name, date, categoryName, amount } = req.body
+    const { name, date, categoryName, amount, merchant } = req.body
     let category = await Category.findOne({ name: categoryName }).lean()
     let record = await Record.create({
       name,
       date,
       categoryId: category._id,
-      amount
+      amount,
+      merchant
     })
     return res.redirect('/')
   } catch (err) {
@@ -107,13 +108,14 @@ app.get('/records/:id/edit', async (req, res) => {
 app.put('/records/:id', async (req, res) => {
   try {
     const recordId = req.params.id
-    const { name, date, categoryName, amount } = req.body
+    const { name, date, categoryName, amount, merchant } = req.body
     let category = await Category.findOne({ name: categoryName }).lean()
     let record = await Record.findById(recordId)
     record.name = name
     record.date = date
     record.categoryId = category._id
     record.amount = amount
+    record.merchant = merchant
     let saveRecord = await record.save()
     return res.redirect('/')
   } catch (err) {
