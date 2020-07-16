@@ -29,7 +29,12 @@ app.use(methodOverride('_method'))
 
 app.get('/', async (req, res) => {
   try {
-    const categoryIdFilter = req.query.categoryId
+    const categoryIdFilter = req.query.categoryId || ''
+    const monthFilter = req.query.month || ''
+    const yearMonth = req.query.month.split('-')
+    let nextMonth = parseInt(yearMonth[1]) + 1
+    nextMonth = (nextMonth > 9) ? `${nextMonth}` : `0${nextMonth}`
+
     const categories = await Category.find().lean().sort({ _id: 'asc' })
     const categoryTable = {}
     categories.forEach(category => {
@@ -37,9 +42,25 @@ app.get('/', async (req, res) => {
       category._id = category._id.toString()
       category.compareWith = categoryIdFilter
     })
-    const records = categoryIdFilter
-      ? await Record.find({ categoryId: categoryIdFilter }).lean().sort({ _id: 'asc' })
-      : await Record.find().lean().sort({ _id: 'asc' })
+
+    let records = ''
+    if (categoryIdFilter && monthFilter) {
+      records = await Record.find({
+        categoryId: categoryIdFilter,
+        $and: [{ date: { $gte: `${yearMonth[0]}-${yearMonth[1]}` } },
+        { date: { $lte: `${yearMonth[0]}-${nextMonth}` } }]
+      }).lean().sort({ _id: 'asc' })
+    } else if (categoryIdFilter) {
+      records = await Record.find({ categoryId: categoryIdFilter }).lean().sort({ _id: 'asc' })
+    } else if (monthFilter) {
+      records = await Record.find({
+        $and: [{ date: { $gte: `${yearMonth[0]}-${yearMonth[1]}` } },
+        { date: { $lte: `${yearMonth[0]}-${nextMonth}` } }]
+      }).lean().sort({ _id: 'asc' })
+    } else {
+      records = await Record.find().lean().sort({ _id: 'asc' })
+    }
+
     let totalAmount = 0
     records.forEach(record => {
       record.icon = categoryTable[record.categoryId]
@@ -47,7 +68,7 @@ app.get('/', async (req, res) => {
       record.date = `${date.getUTCFullYear()}/${date.getUTCMonth() + 1}/${date.getUTCDate()}`
       totalAmount += record.amount
     })
-    return res.render('index', { records, totalAmount, categories })
+    return res.render('index', { records, totalAmount, categories, monthFilter })
   } catch (err) {
     console.log(err)
   }
@@ -82,7 +103,6 @@ app.post('/records', async (req, res) => {
 app.get('/records/:id/edit', async (req, res) => {
   try {
     const record = await Record.findOne({ _id: req.params.id }).lean()
-    console.log(record.date)
     const YYYY = `${record.date.getUTCFullYear()}`
     const MM = (record.date.getUTCMonth() + 1) > 9
       ? `${record.date.getUTCMonth() + 1}`
